@@ -1,0 +1,6 @@
+create song (jingle bells,240):
+create kick track:drum1,drum1,drum1,drum1;
+create snare track:silence,drum2,drum2,drum2;
+create hh track:full,full,full,full;
+create piano track:actually,actually;
+end
