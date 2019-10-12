@@ -1,5 +1,4 @@
 import {IEventListener} from "../ast/AstVisitor";
-import ShapeNode from "./ShapeNode";
 import {Node} from "./Node";
 
 export default class SymbolTable implements IEventListener {
@@ -22,10 +21,11 @@ export default class SymbolTable implements IEventListener {
         return this.table.has(key);
     }
 
+    // TODO
     public update(event: string, currentValue: Node, lastValue: Node) {
-        if (event === "node" && currentValue instanceof ShapeNode) {
-            let shapeNode = currentValue as ShapeNode;
-            this.table.set(shapeNode.shape.name, currentValue);
-        }
+        // if (event === "node" && currentValue instanceof ShapeNode) {
+        //     let shapeNode = currentValue as ShapeNode;
+        //     this.table.set(shapeNode.shape.name, currentValue);
+        // }
     }
 }

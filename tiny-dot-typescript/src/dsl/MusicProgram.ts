@@ -3,13 +3,12 @@ import ProgramOutput from "./ProgramOutput";
 import {ProgramOutputStatus} from "./ProgramOutput";
 import Tokenizer from "../parser/Tokenizer";
 import {Node} from "../parser/Node";
-import DigraphNode from "../parser/DigraphNode";
 import SymbolTable from "../parser/SymbolTable";
 import AstVisitor from "../ast/AstVisitor";
 import * as fs from "fs";
 import * as path from "path";
 
-export class DotProgram implements IProgram {
+export class MusicProgram implements IProgram {
 
     source: string;
     ast: Node;
@@ -22,9 +21,9 @@ export class DotProgram implements IProgram {
     public parse(): ProgramOutput {
         try {
             let ctx = new Tokenizer(this.source);
-            let node = new DigraphNode();
+            let node; // TODO add cases to figure out which node it's supposed to be. 
             node.parse(ctx);
-            this.ast = node.root();
+            this.ast = node.root(); // hmm.. 
 
             this.symbolTable = new SymbolTable();
 
@@ -50,27 +49,10 @@ export class DotProgram implements IProgram {
                 return parseOutput;
             }
             let visitor = new AstVisitor(this.ast);
-
-            // let missingDeclarationListener = new MissingDeclarationListener(this.symbolTable);
-            // let redeclarationListener = new RedeclarationListener(this.symbolTable);
-            //
-            // visitor.addListener(missingDeclarationListener);
-            // visitor.addListener(redeclarationListener);
-            // visitor.traverse();
-
             this.ast.setTargetPath(this.targetPath());
             this.ast.compile();
 
             let output = new ProgramOutput(ProgramOutputStatus.SUCCESS, this.ast, this.symbolTable, []);
-            // this.checkCompileErrors(output, missingDeclarationListener);
-            // this.checkCompileErrors(output, redeclarationListener);
-
-            // for (compileError of compileErrorListeners) {
-            //     if (output.errors.length > 0) {
-            //         output.status = ProgramOutputStatus.ERROR;
-            //         output.errors = output.errors.concat(compileError.errors);
-            //     }
-            // }
 
             return output;
         } catch (err) {
