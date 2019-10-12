@@ -1,15 +1,17 @@
-export default class Shape {
-    geoShape: string;
+// ======= FROM TINY DOT ========= 
 
-    name: string;
+// export default class Shape {
+//     geoShape: string;
 
-    constructor() {
+//     name: string;
 
-    }
+//     constructor() {
 
-    public toDigraph() {
-        let name = this.name;
-        let geo = this.geoShape;
-        return `${name}[shape=${geo}]\n`;
-    }
-}
+//     }
+
+//     public toDigraph() {
+//         let name = this.name;
+//         let geo = this.geoShape;
+//         return `${name}[shape=${geo}]\n`;
+//     }
+// }
