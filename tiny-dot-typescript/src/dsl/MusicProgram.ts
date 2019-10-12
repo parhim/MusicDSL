@@ -7,6 +7,7 @@ import SymbolTable from "../parser/SymbolTable";
 import AstVisitor from "../ast/AstVisitor";
 import * as fs from "fs";
 import * as path from "path";
+import Tokens from "../parser/KeyWords";
 
 export class MusicProgram implements IProgram {
 
@@ -20,10 +21,36 @@ export class MusicProgram implements IProgram {
 
     public parse(): ProgramOutput {
         try {
-            let ctx = new Tokenizer(this.source);
-            let node; // TODO add cases to figure out which node it's supposed to be. 
-            node.parse(ctx);
-            this.ast = node.root(); // hmm.. 
+            let context = new Tokenizer(this.source);
+            let node; 
+
+            this.initializeSong(context);
+
+            while (context.hasNext()) {
+                let nextToken = context.top();
+                // if(Tokens.INSTRUMENTS[]){
+
+                // }
+                // if(Tokens[nextToken])
+                // switch (nextToken) {
+                //     case Tokens.INSTRUMENTS:
+                //         let shapeNode = new ShapeNode();
+                //         shapeNode.parse(context);
+                //         nodes.push(shapeNode);
+                //         break;
+                //     case Tokens.CONNECT:
+                //         let edgeNode = new EdgeNode();
+                //         edgeNode.parse(context);
+                //         nodes.push(edgeNode);
+                //         break;
+                //     default:
+                //         throw new ParserError("Unrecognizable token: ${nextToken}");
+                // }
+            }
+
+            // let node; // TODO add cases to figure out which node it's supposed to be. 
+            // node.parse(ctx);
+            // this.ast = node.root(); // hmm.. 
 
             this.symbolTable = new SymbolTable();
 
@@ -71,5 +98,17 @@ export class MusicProgram implements IProgram {
         // }
 
         return path.join(__dirname, "../../resources/build", program_name);
+    }
+
+
+    // todo finish this!
+    public initializeSong(context: Tokenizer) {
+        while(context.hasNext()){ // while generator isn't done or the context has next
+            compile(context.pop());
+        }
+
+        function* compile(nextToken: String){
+            
+        }
     }
 }
