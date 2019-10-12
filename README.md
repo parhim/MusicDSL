@@ -7,7 +7,7 @@ npm install
 npm test
 ```
 
-## MIDI Converter Installation
+## Midifier Installation
 
 first install python 3.7
 
