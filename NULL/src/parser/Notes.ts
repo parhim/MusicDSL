@@ -3,45 +3,39 @@ import Tokenizer from "../parser/Tokenizer";
 import {ParserError} from '../errors/ParserError';
 import {CompileError} from "../errors/CompileError";
 import {OutputWriter} from "../dsl/OutputWriter";
-import {MeasureLength, Notes, Punctuation} from "./KeyWords";
+import KeyWords, {MeasureLength, Punctuation} from "./KeyWords";
 import SymbolTable from "./SymbolTable"
 
-export default class Beats extends Node {
-    rhythmInstrument: String;
+export default class Notes extends Node {
+    melodicInstrument: String;
     name: String;
 
-    constructor(name: String, rhythmInstrument: String) {
+    constructor(name: String, melodicInstrument: String) {
         super();
-        this.rhythmInstrument = rhythmInstrument;
+        this.melodicInstrument = melodicInstrument;
         this.name = name;
     }
 
     public parse(context: Tokenizer) {
-        let beats = [];
+        let notes = [];
         let lineNum = context.getLine();
 
         while (context.hasNext() && (lineNum == context.getLine())) {
-            let beat = Number(context.pop());
-
-            if (beat == Notes.RHYTHMIC.ZERO) {
-                beats.push(Notes.RHYTHMIC.ZERO)
-            } else if (beat == Notes.RHYTHMIC.ONE) {
-                beats.push(Notes.RHYTHMIC.ONE)
-            }
+            // TODO: figure out how to separate chords into notes and into diff tracks??
 
             let comma = context.pop();
             if (comma != Punctuation.COMMA) {
-                throw new ParserError("Beats must be separated with commas")
+                throw new ParserError("Notes must be separated with commas")
             }
         }
-        if (beats.length != MeasureLength)
+        if (notes.length != MeasureLength)
         {
-            throw new ParserError("Beats must be of length 8")
+            throw new ParserError("Notes must be of length 8")
         }
         SymbolTable.set(this.name,
             {
-                "Instrument" : this.rhythmInstrument,
-                "Notes" : beats
+                "Instrument" : this.melodicInstrument,
+                "Notes" : notes
             });
     }
 

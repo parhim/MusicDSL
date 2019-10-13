@@ -23,7 +23,7 @@ export default class Tokenizer {
         this.tokenize();
     }
 
-    private tokenize() {
+    private tokenize() { // TODO maybe get rid of commas
         this.tokens = this.program.split('\n').join(' NEW_LINE ').match(/\S+/g) || [];
         this.currentTokenIdx = 0;
         this.line = 1;
@@ -61,5 +61,12 @@ export default class Tokenizer {
 
     public getLine(): number {
         return this.line;
+    }
+
+    public getAndCheckNext(t: string): boolean {
+        if(this.top() != t){
+            throw new ParserError("Unexpected token: ${nextToken}");
+        }
+        return true; 
     }
 }
