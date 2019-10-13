@@ -3,8 +3,6 @@ import ProgramOutput from "./ProgramOutput";
 import { ProgramOutputStatus } from "./ProgramOutput";
 import Tokenizer from "../parser/Tokenizer";
 import { Node } from "../parser/Node";
-import SymbolTable from "../parser/SymbolTable";
-import AstVisitor from "../ast/AstVisitor";
 import * as fs from "fs";
 import * as path from "path";
 import KeyWords, { Punctuation, Tokens } from '../parser/KeyWords';
@@ -13,9 +11,9 @@ import {ParserError} from '../errors/ParserError';
 export class MusicProgram implements IProgram {
 
     source: string;
-    ast: Node;
-    symbolTable: SymbolTable;
+    nodes: Node[];
     name: String;
+
 
     constructor(source: string) {
         this.source = source;
@@ -42,52 +40,25 @@ export class MusicProgram implements IProgram {
                 else {
                     throw new ParserError("Unrecognizable token: ${nextToken}");
                 }
+                this.nodes.push(node);
+                node.parse(context);
             }
-
-            node.parse(context);
-            this.ast = node.root(); // hmm.. 
-
-            this.symbolTable = new SymbolTable();
-
-            let visitor = new AstVisitor(this.ast);
-            visitor.addListener(this.symbolTable);
-            visitor.traverse();
-
-            return new ProgramOutput(ProgramOutputStatus.SUCCESS, this.ast, this.symbolTable, []);
+            return new ProgramOutput(ProgramOutputStatus.SUCCESS, null);
         } catch (err) {
-            return new ProgramOutput(ProgramOutputStatus.ERROR, this.ast, this.symbolTable, []);
+            return new ProgramOutput(ProgramOutputStatus.ERROR, err);
         }
 
 
     }
 
     public compile(): ProgramOutput {
-        try {
-            let parseOutput = this.parse();
-            if (parseOutput.status == ProgramOutputStatus.ERROR) {
-                parseOutput.errors.forEach((e) => {
-                    console.log(e.message);
-                });
-                return parseOutput;
-            }
-            let visitor = new AstVisitor(this.ast);
-            this.ast.setTargetPath(this.targetPath());
-            this.ast.compile();
-
-            let output = new ProgramOutput(ProgramOutputStatus.SUCCESS, this.ast, this.symbolTable, []);
-
-            return output;
-        } catch (err) {
-            return new ProgramOutput(ProgramOutputStatus.ERROR, this.ast, this.symbolTable, [err]);
+        try{
+            this.nodes.forEach(node => {
+                node.compile();
+            });
+        } catch(err){
+            return new ProgramOutput(ProgramOutputStatus.ERROR, err);
         }
-    }
-
-    public targetPath(): string {
-        let mypath = this.source.split("/");
-        let program_name = mypath[mypath.length - 1].replace(".tdot", ".dot");
-        program_name = "target_" + program_name;
-
-        return path.join(__dirname, "../../resources/build", program_name);
     }
 
     public initializeSong(context: Tokenizer) {

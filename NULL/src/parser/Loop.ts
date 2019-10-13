@@ -4,6 +4,7 @@ import { ParserError } from '../errors/ParserError';
 import { Tokens, Punctuation } from "./KeyWords";
 import { CompileError } from "../errors/CompileError";
 import { OutputWriter } from "../dsl/OutputWriter";
+import SymbolTable from "./SymbolTable";
 
 export default class Loop extends Node {
     private num: number;
@@ -24,19 +25,15 @@ export default class Loop extends Node {
     }
 
 
-    public compile() {
+    public compile(): any {
         try {
-            let file = this.target;
-            let writer = OutputWriter.getInstance(file, 'utf-8');
+            // get the section or primitive. 
+            SymbolTable.get(name);
 
-            // ===== a compilation example from starter ====== 
-            // writer.write("digraph G {\n");
-            // this.children.forEach((node) => {
-            //     node.compile()
-            // });
-            // writer.write("}");
+            for(let x = 0; x < this.num; x++){
+                // expand it num times ?? 
 
-            writer.flush();
+            }
         } catch (err) {
             throw new CompileError(err.message);
         }

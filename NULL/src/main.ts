@@ -1,5 +1,9 @@
 import {MusicProgram} from "./dsl/MusicProgram";
 
-
-let dotProgram = new MusicProgram("valid/sample.tdot");
-dotProgram.compile();
+let musicProgram = new MusicProgram("valid/sample.tdot");
+try{
+    musicProgram.parse();
+    musicProgram.compile();
+} catch(err){
+    console.log(err);
+}
