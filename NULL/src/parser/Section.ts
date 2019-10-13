@@ -1,7 +1,7 @@
 import {Node} from "./Node";
 import Tokenizer from "../parser/Tokenizer";
 import {ParserError} from '../errors/ParserError';
-import Tokens from "./KeyWords";
+import {Tokens} from "./KeyWords";
 import {CompileError} from "../errors/CompileError";
 import {OutputWriter} from "../dsl/OutputWriter";
 
