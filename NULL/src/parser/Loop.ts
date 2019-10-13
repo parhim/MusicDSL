@@ -42,10 +42,6 @@ export default class Loop extends Node {
         }
     }
 
-    private *generate(t: String) {
-
-    }
-
     public root(): Node {
         return this;
     }
