@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as fs from 'fs';
 
-import {DotProgram} from '../../src/dsl/DotProgram';
+import {MusicProgram} from '../../src/dsl/MusicProgram';
 import {OutputWriter} from '../../src/dsl/OutputWriter';
 import ProgramOutput, {ProgramOutputStatus} from '../../src/dsl/ProgramOutput';
 import * as path from "path";
@@ -9,7 +9,7 @@ import * as path from "path";
 
 const expect = chai.expect;
 
-const compile = (dotProgram: DotProgram): ProgramOutput => {
+const compile = (dotProgram: MusicProgram): ProgramOutput => {
     let output = dotProgram.compile();
 
     if (ProgramOutputStatus.ERROR == output.status) {
@@ -35,7 +35,7 @@ describe('DSL should be able to compile', () => {
 
     it('should compile a valid input', async () => {
 
-        let dotProgram = new DotProgram("valid/sample.tdot");
+        let dotProgram = new MusicProgram("valid/sample.tdot");
         let output = compile(dotProgram);
         let outputString = load("valid/output/sample.dot");
         expect(output.status).to.be.equal(ProgramOutputStatus.SUCCESS);
@@ -45,7 +45,7 @@ describe('DSL should be able to compile', () => {
 
     it('should compile Fido Biff input', async () => {
 
-        let dotProgram = new DotProgram("valid/FidoBiff.tdot");
+        let dotProgram = new MusicProgram("valid/FidoBiff.tdot");
         let output = compile(dotProgram);
         let outputString = load("valid/output/FidoBiff.dot");
         expect(output.status).to.be.equal(ProgramOutputStatus.SUCCESS);
@@ -55,7 +55,7 @@ describe('DSL should be able to compile', () => {
 
     it('should compile FooBar input', async () => {
 
-        let dotProgram = new DotProgram("valid/FooBar.tdot");
+        let dotProgram = new MusicProgram("valid/FooBar.tdot");
         let output = compile(dotProgram);
         let outputString = load("valid/output/FooBar.dot");
         expect(output.status).to.be.equal(ProgramOutputStatus.SUCCESS);
@@ -65,7 +65,7 @@ describe('DSL should be able to compile', () => {
 
     it('should compile LifeUniverseAndEverythingElse input', async () => {
 
-        let dotProgram = new DotProgram("valid/LifeUniverseAndEverythingElse.tdot");
+        let dotProgram = new MusicProgram("valid/LifeUniverseAndEverythingElse.tdot");
         let output = compile(dotProgram);
         let outputString = load("valid/output/LifeUniverseAndEverythingElse.dot");
         expect(output.status).to.be.equal(ProgramOutputStatus.SUCCESS);

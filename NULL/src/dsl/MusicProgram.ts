@@ -1,19 +1,21 @@
 import IProgram from './IProgram';
 import ProgramOutput from "./ProgramOutput";
-import {ProgramOutputStatus} from "./ProgramOutput";
+import { ProgramOutputStatus } from "./ProgramOutput";
 import Tokenizer from "../parser/Tokenizer";
-import {Node} from "../parser/Node";
+import { Node } from "../parser/Node";
 import SymbolTable from "../parser/SymbolTable";
 import AstVisitor from "../ast/AstVisitor";
 import * as fs from "fs";
 import * as path from "path";
-import Tokens from "../parser/KeyWords";
+import KeyWords, { Punctuation, Tokens } from '../parser/KeyWords';
+import {ParserError} from '../errors/ParserError';
 
 export class MusicProgram implements IProgram {
 
     source: string;
     ast: Node;
     symbolTable: SymbolTable;
+    name: String;
 
     constructor(source: string) {
         this.source = source;
@@ -22,35 +24,28 @@ export class MusicProgram implements IProgram {
     public parse(): ProgramOutput {
         try {
             let context = new Tokenizer(this.source);
-            let node; 
+            let node = null;
 
             this.initializeSong(context);
 
             while (context.hasNext()) {
                 let nextToken = context.top();
-                // if(Tokens.INSTRUMENTS[]){
-
-                // }
-                // if(Tokens[nextToken])
-                // switch (nextToken) {
-                //     case Tokens.INSTRUMENTS:
-                //         let shapeNode = new ShapeNode();
-                //         shapeNode.parse(context);
-                //         nodes.push(shapeNode);
-                //         break;
-                //     case Tokens.CONNECT:
-                //         let edgeNode = new EdgeNode();
-                //         edgeNode.parse(context);
-                //         nodes.push(edgeNode);
-                //         break;
-                //     default:
-                //         throw new ParserError("Unrecognizable token: ${nextToken}");
-                // }
+                if (KeyWords.isInstrument(nextToken)) {
+                    // node = new Instrument(); TODO maybe use a factory to return the right type of instrument. 
+                }
+                else if (Tokens.SECTION == nextToken){
+                    // node = new Section()
+                }
+                else if (Tokens.RETURN == nextToken){
+                    // node = new Return()
+                }
+                else {
+                    throw new ParserError("Unrecognizable token: ${nextToken}");
+                }
             }
 
-            // let node; // TODO add cases to figure out which node it's supposed to be. 
-            // node.parse(ctx);
-            // this.ast = node.root(); // hmm.. 
+            node.parse(context);
+            this.ast = node.root(); // hmm.. 
 
             this.symbolTable = new SymbolTable();
 
@@ -92,23 +87,28 @@ export class MusicProgram implements IProgram {
         let program_name = mypath[mypath.length - 1].replace(".tdot", ".dot");
         program_name = "target_" + program_name;
 
-        // if (mypath.slice(0, mypath.length - 1).length > 0) {
-        //     let prefix = mypath.slice(0, mypath.length - 1).join("/");
-        //     return path.join(__dirname, "../../resources/build", prefix, program_name);
-        // }
-
         return path.join(__dirname, "../../resources/build", program_name);
     }
 
-
-    // todo finish this!
     public initializeSong(context: Tokenizer) {
-        while(context.hasNext()){ // while generator isn't done or the context has next
-            compile(context.pop());
+        const iterator = this.generator("");
+        while (context.hasNext()) {
+            let nextToken = context.pop();
+            if (iterator.next(nextToken).value == undefined) {
+                throw new ParserError("Unrecognizable token: ${nextToken}");
+            }
         }
+    }
 
-        function* compile(nextToken: String){
-            
-        }
+    public *generator(t) {
+        if (t != Tokens.CREATESONG) return;
+        yield;
+        if (t != Punctuation.L_PAREN) return;
+        yield;
+        this.name = yield t;
+        if (t != Punctuation.R_PAREN) return;
+        yield;
+        if (t != Punctuation.COLON) return;
+        yield;
     }
 }

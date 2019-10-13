@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import {DotProgram} from '../../src/dsl/DotProgram';
+import {MusicProgram} from '../../src/dsl/MusicProgram';
 
 import {ProgramOutputStatus} from '../../src/dsl/ProgramOutput';
 
@@ -13,19 +13,19 @@ describe('DSL should be able to parse', () => {
     });
 
     it('should parse a valid input', async () => {
-        let dotProgram = new DotProgram("valid/sample.tdot");
+        let dotProgram = new MusicProgram("valid/sample.tdot");
         let output = dotProgram.parse();
         expect(output.status).to.be.equal(ProgramOutputStatus.SUCCESS)
     });
 
     it('should parse a valid simple input', async () => {
-        let dotProgram = new DotProgram("valid/simple.tdot");
+        let dotProgram = new MusicProgram("valid/simple.tdot");
         let output = dotProgram.parse();
         expect(output.status).to.be.equal(ProgramOutputStatus.SUCCESS)
     });
 
     it('should not parse a non existing file', async () => {
-        let dotProgram = new DotProgram("sample.tdot");
+        let dotProgram = new MusicProgram("sample.tdot");
         let output = dotProgram.parse();
         expect(output.status).to.be.equal(ProgramOutputStatus.ERROR)
     });
@@ -38,7 +38,7 @@ describe('DSL should be able to parse', () => {
             "invalid/incomplete.shape.missing.please.tdot"
         ];
         for (let input of invalidInputs) {
-            let dotProgram = new DotProgram(input);
+            let dotProgram = new MusicProgram(input);
             let output = dotProgram.parse();
             expect(output.status).to.be.equal(ProgramOutputStatus.ERROR)
         }
