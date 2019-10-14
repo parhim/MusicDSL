@@ -1,7 +1,6 @@
 import {Node} from "./Node";
 import Tokenizer from "../parser/Tokenizer";
 import {CompileError} from "../errors/CompileError";
-import {OutputWriter} from "../dsl/OutputWriter";
 import {ParserError} from "../errors/ParserError";
 import Beats from "./Beats";
 import {Punctuation} from "./KeyWords";

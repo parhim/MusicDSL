@@ -3,7 +3,6 @@ import Tokenizer from "./Tokenizer";
 import { ParserError } from '../errors/ParserError';
 import { Tokens, Punctuation } from "./KeyWords";
 import { CompileError } from "../errors/CompileError";
-import { OutputWriter } from "../dsl/OutputWriter";
 import SymbolTable from "./SymbolTable";
 
 export default class Loop extends Node {
