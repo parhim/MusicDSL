@@ -4,6 +4,7 @@ import { ParserError } from '../errors/ParserError';
 import { Tokens, Punctuation } from "./KeyWords";
 import { CompileError } from "../errors/CompileError";
 import SymbolTable from "./SymbolTable";
+import { MissingDeclarationError } from "../errors/MissingDeclarationError";
 
 export default class Loop extends Node {
     private num: number;
@@ -23,6 +24,9 @@ export default class Loop extends Node {
         context.getAndCheckNext(Punctuation.R_PAREN);
     }
 
+    private nameCheck() {
+        if(!SymbolTable.has(name)) throw new MissingDeclarationError("This section/primitive has not been declared: " + name);
+    }
 
     public compile(): any {
         try {
@@ -42,4 +46,4 @@ export default class Loop extends Node {
         return this;
     }
 
-}
+} 
