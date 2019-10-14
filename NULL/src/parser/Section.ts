@@ -1,9 +1,9 @@
 import {Node} from "./Node";
 import Tokenizer from "../parser/Tokenizer";
 import {ParserError} from '../errors/ParserError';
-import {Tokens} from "./KeyWords";
 import {CompileError} from "../errors/CompileError";
 import {OutputWriter} from "../dsl/OutputWriter";
+import KeyWords from "./KeyWords";
 
 export default class Section extends Node {
 
@@ -17,7 +17,7 @@ export default class Section extends Node {
         while (context.hasNext()) {
             let nextToken = context.top();
             switch (nextToken) {
-                case Tokens.PIPE:
+                case KeyWords.Tokens.PIPE:
                     // TODO
                     break;
                 default:
