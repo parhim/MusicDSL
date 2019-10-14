@@ -18,12 +18,12 @@ export default class Tokenizer {
         try {
             this.program = fs.readFileSync(path.join(__dirname, "../../resources", fileName)).toString('utf-8');
         } catch (err) {
-            throw new ParserError("Unable to load source: ${filename}");
+            throw new ParserError(`Unable to load source: ${fileName}`);
         }
         this.tokenize();
     }
 
-    private tokenize() { // TODO maybe get rid of commas
+    private tokenize() {
         this.tokens = this.program.split('\n').join(' NEW_LINE ').match(/\S+/g) || [];
         this.currentTokenIdx = 0;
         this.line = 1;
@@ -66,7 +66,7 @@ export default class Tokenizer {
     public checkNext(t: String): String {
         const s = this.top();
         if (s != t) {
-            throw new ParserError("Unexpected token: ${nextToken}");
+            throw new ParserError(`Unexpected token: ${t}`);
         }
         return s;
     }
@@ -74,14 +74,14 @@ export default class Tokenizer {
     public getAndCheckNext(t: string): String {
         const s = this.pop();
         if(s != t){
-            throw new ParserError("Unexpected token: ${nextToken}");
+            throw new ParserError(`Unexpected token: ${t}`);
         }
         return s; 
     }
     public getAndCheckNextReg(t: RegExp): String {
         const s = this.pop();
         if (!s.match(t)) {
-            throw new ParserError("Unexpected token: ${nextToken}");
+            throw new ParserError(`Unexpected token: ${t}`);
         }
         return s;
     }
@@ -89,7 +89,7 @@ export default class Tokenizer {
     public checkNextReg(t: RegExp): String {
         const s = this.top();
         if (!s.match(t)) {
-            throw new ParserError("Unexpected token: ${nextToken}");
+            throw new ParserError(`Unexpected token: ${t}`);
         }
         return s;
     }
