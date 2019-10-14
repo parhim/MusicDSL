@@ -16,9 +16,9 @@ export default class Loop extends Node {
     public parse(context: Tokenizer) {
         context.getAndCheckNext(Tokens.LOOP);
         context.getAndCheckNext(Punctuation.L_PAREN);
-        this.name = context.top();
+        this.name = context.pop();
         context.getAndCheckNext(Punctuation.COMMA);
-        context.getAndCheckNext(Tokens.IDENTIFIER);
+        context.getAndCheckNextReg(Tokens.IDENTIFIER);
         this.num = Number(context.top());
         if(isNaN(this.num)) throw new ParserError("Expected a number. Got: ${this.num}")
         context.getAndCheckNext(Punctuation.R_PAREN);

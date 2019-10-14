@@ -63,10 +63,34 @@ export default class Tokenizer {
         return this.line;
     }
 
-    public getAndCheckNext(t: string): boolean {
-        if(this.top() != t){
+    public checkNext(t: String): String {
+        const s = this.top();
+        if (s != t) {
             throw new ParserError("Unexpected token: ${nextToken}");
         }
-        return true; 
+        return s;
+    }
+
+    public getAndCheckNext(t: string): String {
+        const s = this.pop();
+        if(s != t){
+            throw new ParserError("Unexpected token: ${nextToken}");
+        }
+        return s; 
+    }
+    public getAndCheckNextReg(t: RegExp): String {
+        const s = this.pop();
+        if (!s.match(t)) {
+            throw new ParserError("Unexpected token: ${nextToken}");
+        }
+        return s;
+    }
+    
+    public checkNextReg(t: RegExp): String {
+        const s = this.top();
+        if (!s.match(t)) {
+            throw new ParserError("Unexpected token: ${nextToken}");
+        }
+        return s;
     }
 }

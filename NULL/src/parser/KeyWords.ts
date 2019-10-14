@@ -1,7 +1,7 @@
 
 export default class KeyWords{
     public static Tokens = {
-        IDENTIFIER: "[_A-Za-z]+([A-Za-z0-9]*)",
+        IDENTIFIER: /[_A-Za-z]+([A-Za-z0-9]*)/g,
         CREATESONG: "createsong",
         KICK: "Kick",
         SNARE: "Snare",
