@@ -3,36 +3,37 @@ import Tokenizer from "../parser/Tokenizer";
 import {ParserError} from '../errors/ParserError';
 import {CompileError} from "../errors/CompileError";
 import {OutputWriter} from "../dsl/OutputWriter";
-import KeyWords from "./KeyWords";
+import Notes from "./Notes";
+import {Punctuation} from "./KeyWords";
 
-export default class Section extends Node {
+
+export default class Melodic extends Node {
+    instrument: String;
+    name: String;
+    notes: Notes;
 
     constructor() {
         super();
     }
-
-    public parse(context: Tokenizer) {
-        let nodes: Array<Node> = [];
-
-        while (context.hasNext()) {
-            let nextToken = context.top();
-            switch (nextToken) {
-                case KeyWords.Tokens.PIPE:
-                    // TODO
-                    break;
-                default:
-                    throw new ParserError("Unrecognizable token: ${nextToken}");
-            }
+    parse(context: Tokenizer) {
+        this.instrument = context.pop();
+        this.name = context.pop();
+        context.pop();
+        if (comma != Punctuation.EQUAL) {
+            throw new ParserError("Missing '=' from " + this.instrument + " declaration")
         }
+
+        let notes = new Notes(this.name, this.instrument);
+        this.notes = notes;
+        notes.parse(context);
     }
 
-
-    public compile() {
+    compile() {
         try {
             let file = this.target;
             let writer = OutputWriter.getInstance(file, 'utf-8');
 
-            // ===== a compilation example from starter ====== 
+            // ===== a compilation example from starter ======
             // writer.write("digraph G {\n");
             // this.children.forEach((node) => {
             //     node.compile()
@@ -40,13 +41,10 @@ export default class Section extends Node {
             // writer.write("}");
 
             writer.flush();
+            return this.notes.compile();
         } catch (err) {
             throw new CompileError(err.message);
         }
-    }
-
-    public root(): Node {
-        return this;
     }
 
 }

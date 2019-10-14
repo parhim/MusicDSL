@@ -7,6 +7,8 @@ import * as fs from "fs";
 import * as path from "path";
 import KeyWords, { Punctuation, Tokens } from '../parser/KeyWords';
 import {ParserError} from '../errors/ParserError';
+import Rhythmic from "../parser/Rhythmic";
+import Melodic from "../parser/Melodic";
 
 export class MusicProgram implements IProgram {
 
@@ -29,7 +31,11 @@ export class MusicProgram implements IProgram {
             while (context.hasNext()) {
                 let nextToken = context.top();
                 if (KeyWords.isInstrument(nextToken)) {
-                    // node = new Instrument(); TODO maybe use a factory to return the right type of instrument. 
+                    if (Tokens.INSTRUMENTS.MELODIC.GUITAR == nextToken || Tokens.INSTRUMENTS.MELODIC.ORGAN == nextToken) {
+                        node = new Melodic();
+                    } else {
+                        node = new Rhythmic();
+                    }
                 }
                 else if (Tokens.SECTION == nextToken){
                     // node = new Section()
