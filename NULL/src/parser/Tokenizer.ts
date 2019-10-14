@@ -1,3 +1,4 @@
+import { Punctuation } from './KeyWords';
 import * as fs from 'fs';
 import * as path from 'path';
 import {ParserError} from '../errors/ParserError';
@@ -24,6 +25,21 @@ export default class Tokenizer {
     }
 
     private tokenize() {
+        // Replace weird directional quotes
+        this.program = this.program.replace(/“|”/g, "\"");
+        console.log(this.program);
+        
+        // Put spaces around punctuation
+        let puncts = Object.keys(Punctuation);
+        puncts.forEach((punct) => {
+            let p = Punctuation[punct];
+            let re = new RegExp(`\\${p}`, "g");
+            console.log(punct, re);
+            this.program = this.program.replace(re, ` ${p} `);
+        })
+        console.log(this.program);
+
+        // Split into tokens
         this.tokens = this.program.split('\n').join(' NEW_LINE ').match(/\S+/g) || [];
         this.currentTokenIdx = 0;
         this.line = 1;

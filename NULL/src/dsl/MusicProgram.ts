@@ -58,6 +58,7 @@ export class MusicProgram implements IProgram {
 
     public initializeSong(context: Tokenizer) {
         const iterator = this.generator("");
+        console.log(context);
         while (context.hasNext()) {
             let nextToken = context.pop();
             if (iterator.next(nextToken).value == undefined) {
