@@ -1,13 +1,23 @@
 # NULL 🤷
 
-## Language Processor Installation
+## CLI Instructions
+
 ```
 cd NULL
-npm install
+npm install -g
+npm run-script build
+null grammarsamples/grammar.txt # to input file
+```
+
+
+## DEV Language Processor Installation 
+```
+cd NULL
+npm install -g
 npm test
 ```
 
-## Midifier Installation
+## DEV Midifier Installation
 
 first install python 3.7
 

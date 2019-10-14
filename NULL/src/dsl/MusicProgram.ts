@@ -20,9 +20,11 @@ export class MusicProgram implements IProgram {
     nodes: Node[];
     name: string;
     song: any;
+    outputDest: string;
 
 
-    constructor(source: string) {
+    constructor(source: string, outputDest: string = "") {
+        this.outputDest = outputDest;
         this.source = source;
         this.nodes = [];
         this.name = "";
@@ -52,7 +54,6 @@ export class MusicProgram implements IProgram {
                 node = new Return();
             }
             else {
-                console.log(context);
                 throw new ParserError(`Unrecognizable token: ${nextToken}`);
             }
             this.nodes.push(node);
@@ -64,12 +65,12 @@ export class MusicProgram implements IProgram {
         this.nodes.forEach(node => {
             this.song = node.compile();
         });
-        let final: Song = {
+        let finalSong: Song = {
             Title: this.name,
             Song: this.song
         }
-        let writer = OutputWriter.getInstance("song.json", 'utf-8');
-        writer.write(JSON.stringify(final));
+        let writer = OutputWriter.getInstance(`${this.outputDest}/song.json`, 'utf-8');
+        writer.write(JSON.stringify(finalSong));
         writer.flush();
     }
 

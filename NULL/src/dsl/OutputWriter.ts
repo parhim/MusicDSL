@@ -34,8 +34,6 @@ export class OutputWriter {
 
     public flush() {
         fs.writeFileSync(this.file, this.out.join("\n"), {encoding: this.encoding, flag: 'w'});
-        console.log("done");
-
     }
 
     public static tearDown() {

@@ -60,7 +60,7 @@ export default class KeyWords{
         return Tokens.INSTRUMENTS.MELODIC[term] || Tokens.INSTRUMENTS.RHYTHMIC[term];
     }
 
-    public static Debug = true;
+    public static Debug = false;
 }
 
 

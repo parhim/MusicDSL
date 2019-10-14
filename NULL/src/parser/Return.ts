@@ -13,7 +13,6 @@ export default class Return extends Node {
 
     public parse(context: Tokenizer) {
         this.name = context.getAndCheckNextReg(Tokens.IDENTIFIER);
-        console.log(this.name);
     }
 
 

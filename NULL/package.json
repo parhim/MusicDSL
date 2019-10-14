@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "license": "MIT",
   "main": "build/index.js",
+  "bin": {
+    "null": "out/main.js"
+  },
   "scripts": {
     "clean": "rm -rf ./typings/; rm -rf ./node_modules/",
     "configure": "yarn install; typings install --global;",
@@ -29,6 +32,8 @@
   },
   "dependencies": {
     "@types/jest": "^24.0.18",
+    "child_process": "^1.0.2",
+    "minimist": "^1.2.0",
     "save": "^2.4.0",
     "save-dev": "0.0.1-security",
     "typings": "^2.1.1"
