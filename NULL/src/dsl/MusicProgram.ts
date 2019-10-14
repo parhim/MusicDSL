@@ -10,12 +10,16 @@ import Melodic from "../parser/Melodic";
 import Section from "../parser/Section";
 import VarUse from '../parser/VarUse';
 import SymbolTable from '../parser/SymbolTable';
+import Return from '../parser/Return';
+import Song from '../model/Song';
+import { OutputWriter } from './OutputWriter';
 
 export class MusicProgram implements IProgram {
 
     source: string;
     nodes: Node[];
-    name: String;
+    name: string;
+    song: any;
 
 
     constructor(source: string) {
@@ -45,7 +49,7 @@ export class MusicProgram implements IProgram {
             }
             else if (Tokens.RETURN == nextToken){
                 context.pop();
-                node = new VarUse(); // Temp
+                node = new Return();
             }
             else {
                 console.log(context);
@@ -58,8 +62,15 @@ export class MusicProgram implements IProgram {
 
     public compile(): void {
         this.nodes.forEach(node => {
-            node.compile();
+            this.song = node.compile();
         });
+        let final: Song = {
+            Title: this.name,
+            Song: this.song
+        }
+        let writer = OutputWriter.getInstance("song.json", 'utf-8');
+        writer.write(JSON.stringify(final));
+        writer.flush();
     }
 
     public initializeSong(context: Tokenizer) {
