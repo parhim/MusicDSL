@@ -54,10 +54,10 @@ export default class KeyWords{
     }
 
     public static isInstrument(term: string): boolean {
-        let MELODIC, RHYTHMIC;
-        Tokens.INSTRUMENTS = {MELODIC, RHYTHMIC} 
         term = term.toUpperCase();
-        return MELODIC[term] || RHYTHMIC[term];
+        console.log(term);
+        console.log(Notes.RHYTHMIC[term]);
+        return Tokens.INSTRUMENTS.MELODIC[term] || Tokens.INSTRUMENTS.RHYTHMIC[term];
     }
 }
 
