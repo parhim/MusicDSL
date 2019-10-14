@@ -9,6 +9,7 @@ import SymbolTable from "./SymbolTable"
 export default class Beats extends Node {
     rhythmInstrument: String;
     name: String;
+    beats: Array<Number>;
 
     constructor(name: String, rhythmInstrument: String) {
         super();
@@ -17,16 +18,15 @@ export default class Beats extends Node {
     }
 
     public parse(context: Tokenizer) {
-        let beats = [];
         let lineNum = context.getLine();
 
         while (context.hasNext() && (lineNum == context.getLine())) {
             let beat = Number(context.pop());
 
             if (beat == Notes.RHYTHMIC.ZERO) {
-                beats.push(Notes.RHYTHMIC.ZERO)
+                this.beats.push(Notes.RHYTHMIC.ZERO)
             } else if (beat == Notes.RHYTHMIC.ONE) {
-                beats.push(Notes.RHYTHMIC.ONE)
+                this.beats.push(Notes.RHYTHMIC.ONE)
             }
 
             let comma = context.pop();
@@ -35,35 +35,21 @@ export default class Beats extends Node {
             }
         }
 
-        if (beats.length != MeasureLength)
+        if (this.beats.length != MeasureLength)
         {
             throw new ParserError("Beats must be of length 8")
         }
-
-        let beatsArray = [beats];
-        SymbolTable.set(this.name,
-            [
-                {
-                    "Instrument" : this.rhythmInstrument,
-                    "Notes" : beatsArray
-                }
-            ]);
     }
 
     public compile() {
         try {
-            let file = this.target;
-            let writer = OutputWriter.getInstance(file, 'utf-8');
-
-            // ===== a compilation example from starter ======
-            // writer.write("digraph G {\n");
-            // this.children.forEach((node) => {
-            //     node.compile()
-            // });
-            // writer.write("}");
-
-            writer.flush();
-            return SymbolTable.get(this.name);
+            SymbolTable.set(this.name,
+                [
+                    {
+                        "Instrument" : this.rhythmInstrument,
+                        "Notes" : this.beats
+                    }
+                ]);
         } catch (err) {
             throw new CompileError(err.message);
         }

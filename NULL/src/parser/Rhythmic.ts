@@ -30,18 +30,7 @@ export default class Rhythmic extends Node {
 
     compile() {
         try {
-            let file = this.target;
-            let writer = OutputWriter.getInstance(file, 'utf-8');
-
-            // ===== a compilation example from starter ======
-            // writer.write("digraph G {\n");
-            // this.children.forEach((node) => {
-            //     node.compile()
-            // });
-            // writer.write("}");
-
-            writer.flush();
-            return this.beats.compile();
+            this.beats.compile();
         } catch (err) {
             throw new CompileError(err.message);
         }

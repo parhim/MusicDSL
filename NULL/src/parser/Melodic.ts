@@ -18,7 +18,7 @@ export default class Melodic extends Node {
     parse(context: Tokenizer) {
         this.instrument = context.pop();
         this.name = context.pop();
-        context.pop();
+        let comma = context.pop();
         if (comma != Punctuation.EQUAL) {
             throw new ParserError("Missing '=' from " + this.instrument + " declaration")
         }
@@ -30,18 +30,7 @@ export default class Melodic extends Node {
 
     compile() {
         try {
-            let file = this.target;
-            let writer = OutputWriter.getInstance(file, 'utf-8');
-
-            // ===== a compilation example from starter ======
-            // writer.write("digraph G {\n");
-            // this.children.forEach((node) => {
-            //     node.compile()
-            // });
-            // writer.write("}");
-
-            writer.flush();
-            return this.notes.compile();
+            this.notes.compile();
         } catch (err) {
             throw new CompileError(err.message);
         }

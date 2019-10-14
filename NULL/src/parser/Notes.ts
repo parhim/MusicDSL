@@ -21,6 +21,7 @@ export default class Notes extends Node {
         this.melodicInstrument = melodicInstrument;
         this.name = name;
     }
+
     public parse(context: Tokenizer) {
 
         let lineNum = context.getLine();
@@ -59,19 +60,10 @@ export default class Notes extends Node {
             }
         }
 
-        if (first.length != MeasureLength || second.length != MeasureLength || third.length != MeasureLength)
+        if (this.first.length != MeasureLength || this.third.length != MeasureLength || this.fifth.length != MeasureLength)
         {
             throw new ParserError("Notes must be of length 8")
         }
-
-        let notes = [first,second,third];
-        SymbolTable.set(this.name,
-            [
-                {
-                    "Instrument" : this.melodicInstrument,
-                    "Notes" : notes
-                }
-            ]);
     }
 
     private addChord(first: Number, third: Number, fifth: Number) {
@@ -82,18 +74,21 @@ export default class Notes extends Node {
 
     public compile() {
         try {
-            let file = this.target;
-            let writer = OutputWriter.getInstance(file, 'utf-8');
-
-            // ===== a compilation example from starter ======
-            // writer.write("digraph G {\n");
-            // this.children.forEach((node) => {
-            //     node.compile()
-            // });
-            // writer.write("}");
-
-            writer.flush();
-            return SymbolTable.get(this.name);
+            SymbolTable.set(this.name,
+                [
+                    {
+                        "Instrument" : this.melodicInstrument,
+                        "Notes" : this.first
+                    },
+                    {
+                        "Instrument" : this.melodicInstrument,
+                        "Notes" : this.third
+                    },
+                    {
+                        "Instrument" : this.melodicInstrument,
+                        "Notes" : this.fifth
+                    }
+                ]);
         } catch (err) {
             throw new CompileError(err.message);
         }
