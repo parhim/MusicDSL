@@ -7,7 +7,6 @@ import {OutputWriter} from "../dsl/OutputWriter";
 import Pipe from "./Pipe";
 import SymbolTable from "./SymbolTable";
 
-
 export default class Section extends Node {
 
     private name: String;
@@ -18,22 +17,31 @@ export default class Section extends Node {
 
     public parse(context: Tokenizer) {
         let nodes: Array<Node> = [];
+        let cont = true;
 
         this.name = context.pop();
         context.getAndCheckNext(Punctuation.COLON);
 
-        // let nextToken = .pop();
+        let nextToken = context.pop();
 
         // do while cont style here
-        let cont = true;
-
         while (cont) {
             let pipeNode = new Pipe;
             pipeNode.parse(context);
             nodes.push(pipeNode);
 
-            // if (context.top() == nextToken)
+            nextToken = context.pop();
+            if (nextToken != Tokens.PIPE) {
+                cont = false;
+            }
+        }
 
+        while (nextToken == Tokens.PIPE) {
+            let pipeNode = new Pipe;
+            pipeNode.parse(context);
+            nodes.push(pipeNode);
+
+            nextToken = context.pop();
         }
 
         this.children = nodes;
