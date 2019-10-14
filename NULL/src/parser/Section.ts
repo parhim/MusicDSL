@@ -7,6 +7,7 @@ import {OutputWriter} from "../dsl/OutputWriter";
 import Pipe from "./Pipe";
 import SymbolTable from "./SymbolTable";
 
+
 export default class Section extends Node {
 
     private name: String;
@@ -32,6 +33,7 @@ export default class Section extends Node {
             nodes.push(pipeNode);
 
             // if (context.top() == nextToken)
+
         }
 
         this.children = nodes;
