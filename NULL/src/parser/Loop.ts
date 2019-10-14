@@ -32,13 +32,16 @@ export default class Loop extends Node {
         this.nameCheck()
         try {
             const sections = SymbolTable.get(this.name);
+            let out = [];
             sections.forEach(s => {
+                let newTrack = JSON.parse(JSON.stringify(s));
                 let toAppend = s.Notes;
                 for (let x = 0; x < this.num; x++) {
-                    s.Notes = s.Notes.concat(toAppend);
+                    newTrack.Notes = newTrack.Notes.concat(toAppend);
                 }
+                out.push(newTrack);
             });
-
+            return out;
         } catch (err) {
             throw new CompileError(err.message);
         }
