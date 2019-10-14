@@ -76,10 +76,12 @@ export class MusicProgram implements IProgram {
     public initializeSong(context: Tokenizer) {
         context.getAndCheckNext(Tokens.CREATESONG);
         context.getAndCheckNext(Punctuation.L_PAREN);
+        context.getAndCheckNext(Punctuation.QUOTE);
         let name = "";
-        while(context.hasNext() && context.top() !== Punctuation.R_PAREN) {
-            name += context.pop();
+        while(context.hasNext() && context.top() !== Punctuation.QUOTE) {
+            name += " " +context.pop();
         }
+        context.getAndCheckNext(Punctuation.QUOTE);
         this.name = name;
         context.getAndCheckNext(Punctuation.R_PAREN);
         context.getAndCheckNext(Punctuation.COLON);
