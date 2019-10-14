@@ -6,7 +6,7 @@
 cd NULL
 npm install -g
 npm run-script build
-null grammarsamples/grammar.txt # to input file
+null grammarsamples/grammar.txt # gto input file
 ```
 
 
