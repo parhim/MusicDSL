@@ -8,6 +8,8 @@ import {ParserError} from '../errors/ParserError';
 import Rhythmic from "../parser/Rhythmic";
 import Melodic from "../parser/Melodic";
 import Section from "../parser/Section";
+import VarUse from '../parser/VarUse';
+import SymbolTable from '../parser/SymbolTable';
 
 export class MusicProgram implements IProgram {
 
@@ -42,7 +44,8 @@ export class MusicProgram implements IProgram {
                 node = new Section()
             }
             else if (Tokens.RETURN == nextToken){
-                // node = new Return()
+                context.pop();
+                node = new VarUse(); // Temp
             }
             else {
                 console.log(context);
