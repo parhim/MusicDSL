@@ -7,19 +7,19 @@ import SymbolTable from "./SymbolTable";
 
 export default class Loop extends Node {
     private num: number;
-    private name: string;
+    private name: String;
     constructor() {
         super();
+        this.name = "";
     }
 
     public parse(context: Tokenizer) {
         context.getAndCheckNext(Tokens.LOOP);
         context.getAndCheckNext(Punctuation.L_PAREN);
-        this.name = context.pop();
+        this.name = context.getAndCheckNextReg(Tokens.IDENTIFIER);
         context.getAndCheckNext(Punctuation.COMMA);
-        context.getAndCheckNextReg(Tokens.IDENTIFIER);
-        this.num = Number(context.top());
-        if(isNaN(this.num)) throw new ParserError("Expected a number. Got: ${this.num}")
+        this.num = Number(context.getAndCheckNextReg(Tokens.NUMBER));
+        if(isNaN(this.num)) throw new ParserError(`Expected a number. Got: ${this.num}`)
         context.getAndCheckNext(Punctuation.R_PAREN);
     }
 
@@ -27,7 +27,7 @@ export default class Loop extends Node {
     public compile(): any {
         try {
             // get the section or primitive. 
-            SymbolTable.get(name);
+            SymbolTable.get(this.name);
 
             for(let x = 0; x < this.num; x++){
                 // expand it num times ?? 

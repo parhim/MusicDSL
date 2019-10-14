@@ -1,3 +1,4 @@
+import { Punctuation } from './KeyWords';
 import * as fs from 'fs';
 import * as path from 'path';
 import {ParserError} from '../errors/ParserError';
@@ -24,6 +25,18 @@ export default class Tokenizer {
     }
 
     private tokenize() {
+        // Replace weird directional quotes
+        this.program = this.program.replace(/“|”/g, "\"");
+        
+        // Put spaces around punctuation
+        let puncts = Object.keys(Punctuation);
+        puncts.forEach((punct) => {
+            let p = Punctuation[punct];
+            let re = new RegExp(`\\${p}`, "g");
+            this.program = this.program.replace(re, ` ${p} `);
+        })
+
+        // Split into tokens
         this.tokens = this.program.split('\n').join(' NEW_LINE ').match(/\S+/g) || [];
         this.currentTokenIdx = 0;
         this.line = 1;
@@ -66,7 +79,7 @@ export default class Tokenizer {
     public checkNext(t: String): String {
         const s = this.top();
         if (s != t) {
-            throw new ParserError(`Unexpected token: ${t}`);
+            throw new ParserError(`Unexpected token: ${s}`);
         }
         return s;
     }
@@ -74,14 +87,14 @@ export default class Tokenizer {
     public getAndCheckNext(t: string): String {
         const s = this.pop();
         if(s != t){
-            throw new ParserError(`Unexpected token: ${t}`);
+            throw new ParserError(`Unexpected token: ${s}`);
         }
         return s; 
     }
     public getAndCheckNextReg(t: RegExp): String {
         const s = this.pop();
         if (!s.match(t)) {
-            throw new ParserError(`Unexpected token: ${t}`);
+            throw new ParserError(`Unexpected token: ${s}`);
         }
         return s;
     }
@@ -89,7 +102,7 @@ export default class Tokenizer {
     public checkNextReg(t: RegExp): String {
         const s = this.top();
         if (!s.match(t)) {
-            throw new ParserError(`Unexpected token: ${t}`);
+            throw new ParserError(`Unexpected token: ${s}`);
         }
         return s;
     }

@@ -30,18 +30,12 @@ export default class Section extends Node {
             pipeNode.parse(context);
             nodes.push(pipeNode);
 
-            nextToken = context.pop();
+            nextToken = context.top();
             if (nextToken != Tokens.PIPE) {
                 cont = false;
+            } else {
+                context.pop();
             }
-        }
-
-        while (nextToken == Tokens.PIPE) {
-            let pipeNode = new Pipe;
-            pipeNode.parse(context);
-            nodes.push(pipeNode);
-
-            nextToken = context.pop();
         }
 
         this.children = nodes;

@@ -18,6 +18,8 @@ export class MusicProgram implements IProgram {
 
     constructor(source: string) {
         this.source = source;
+        this.nodes = [];
+        this.name = "";
     }
 
     public parse(): void {
@@ -43,6 +45,7 @@ export class MusicProgram implements IProgram {
                 // node = new Return()
             }
             else {
+                console.log(context);
                 throw new ParserError(`Unrecognizable token: ${nextToken}`);
             }
             this.nodes.push(node);
@@ -57,24 +60,14 @@ export class MusicProgram implements IProgram {
     }
 
     public initializeSong(context: Tokenizer) {
-        const iterator = this.generator("");
-        while (context.hasNext()) {
-            let nextToken = context.pop();
-            if (iterator.next(nextToken).value == undefined) {
-                throw new ParserError(`Unrecognizable token: ${nextToken}`);
-            }
+        context.getAndCheckNext(Tokens.CREATESONG);
+        context.getAndCheckNext(Punctuation.L_PAREN);
+        let name = "";
+        while(context.hasNext() && context.top() !== Punctuation.R_PAREN) {
+            name += context.pop();
         }
-    }
-
-    public *generator(t) {
-        if (t != Tokens.CREATESONG) return;
-        yield;
-        if (t != Punctuation.L_PAREN) return;
-        yield;
-        this.name = yield t;
-        if (t != Punctuation.R_PAREN) return;
-        yield;
-        if (t != Punctuation.COLON) return;
-        yield;
+        this.name = name;
+        context.getAndCheckNext(Punctuation.R_PAREN);
+        context.getAndCheckNext(Punctuation.COLON);
     }
 }

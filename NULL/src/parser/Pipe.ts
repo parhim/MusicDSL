@@ -6,7 +6,7 @@ import Loop from "./Loop";
 import VarUse from "./VarUse";
 
 export default class Pipe extends Node {
-  sequence: Array<Node>;
+  sequence: Array<Node|0>;
 
   constructor() {
       super();
@@ -16,11 +16,14 @@ export default class Pipe extends Node {
   public parse(context: Tokenizer) {
     // Assuming pipe symbol is popped
     let cont = true;
-    while (cont) {
-      if (context.checkNext(Tokens.LOOP)) {
+    while (context.hasNext() && cont) {
+      if (context.top() === Tokens.LOOP) {
         let loop = new Loop();
         loop.parse(context);
         this.sequence.push(loop);
+      } else if (+context.top() === 0) {
+        context.pop();
+        this.sequence.push(0);
       } else {
         let varuse = new VarUse();
         varuse.parse(context);
@@ -30,6 +33,8 @@ export default class Pipe extends Node {
       // Determine end of a pipe by the lack of a comma
       if (context.top() !== Tokens.PUNCTUATION.COMMA) {
         cont = false;
+      } else {
+        context.pop();
       }
     }
   }
@@ -39,7 +44,11 @@ export default class Pipe extends Node {
       try {
         let seq = [];
         this.sequence.forEach((node) => {
-            seq.push(node.compile());
+            if (node === 0) {
+              seq.push([{ Instrument: Tokens.INSTRUMENTS.RHYTHMIC.KICK, Notes: [0], }]); // Just an empty track
+            } else {
+              seq.push(node.compile());
+            }
         });
 
         let prepend = 0;
@@ -68,6 +77,9 @@ export default class Pipe extends Node {
 
           prepend += len;
         });
+
+        // Remove null tracks
+        
 
         return seq;
       } catch (err) {

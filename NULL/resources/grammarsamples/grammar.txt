@@ -1,12 +1,12 @@
-CreateSong(“jingle bells”):
+createsong(“jingle bells”):
 
     Kick b1  = 0,0,0,1,0,0,0,1
     Snare b2 = 1,1,0,0,0,0,0,0
 
-    Organ m  = CMaj, CMaj, 0, CMaj7, 0, 0, 0, CMaj
+    Organ m  = Cmaj, Cmaj, 0, Cmaj7, 0, 0, 0, Cmaj
 
     Section s:
-        | b1, b2, loop(b1 4)
+        | b1, b2, loop(b1, 4)
 
     Section verse:
         | b1, b1, b1, s
@@ -26,17 +26,3 @@ CreateSong(“jingle bells”):
         | 0, verse, bridge, verse
 
     return final
-
-PROGRAM := “createsong(“ TITLE “):” \n SONG \n RETURN
-TITLE := string
-SONG := PRIMITIVE+ & SECTION*
-RETURN := “return” + NAME
-PRIMITIVE := MELODIC|RHYTHMIC \n
-NAME:= string
-MELODIC := [organ|guitar|flute] NAME “=” NOTES
-NOTES := ([cmaj|cmin|cmaj7…..]”,”){8}
-RHYTHMIC := [snare|hat|kick] NAME “=” BEATS
-BEATS := ([0|1]”,”){8}
-SECTION := “Section” NAME “:”
-               (“|” ([SECTION|LOOP|PRIMITIVE]”,”)+ \n)+
-LOOP := “loop(“ [SECTION|PRIMITIVE] ”,” number “)”
