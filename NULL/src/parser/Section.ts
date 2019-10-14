@@ -1,11 +1,15 @@
 import {Node} from "./Node";
 import Tokenizer from "../parser/Tokenizer";
 import {ParserError} from '../errors/ParserError';
-import {Tokens} from "./KeyWords";
+import {Tokens, Punctuation} from "./KeyWords";
 import {CompileError} from "../errors/CompileError";
 import {OutputWriter} from "../dsl/OutputWriter";
+import Pipe from "./Pipe";
+import SymbolTable from "./SymbolTable";
 
 export default class Section extends Node {
+
+    private name: String;
 
     constructor() {
         super();
@@ -14,36 +18,63 @@ export default class Section extends Node {
     public parse(context: Tokenizer) {
         let nodes: Array<Node> = [];
 
-        while (context.hasNext()) {
-            let nextToken = context.top();
-            switch (nextToken) {
-                case Tokens.PIPE:
-                    // TODO
-                    break;
-                default:
-                    throw new ParserError("Unrecognizable token: ${nextToken}");
-            }
+        this.name = context.pop();
+        context.getAndCheckNext(Punctuation.COLON);
+
+        // let nextToken = .pop();
+
+        // do while cont style here
+        let cont = true;
+
+        while (cont) {
+            let pipeNode = new Pipe;
+            pipeNode.parse(context);
+            nodes.push(pipeNode);
+
+            // if (context.top() == nextToken)
         }
+
+        this.children = nodes;
     }
 
 
     public compile() {
         try {
-            let file = this.target;
-            let writer = OutputWriter.getInstance(file, 'utf-8');
 
-            // ===== a compilation example from starter ====== 
-            // writer.write("digraph G {\n");
-            // this.children.forEach((node) => {
-            //     node.compile()
-            // });
-            // writer.write("}");
+            let section: Array<any> = [];
 
-            writer.flush();
+            this.children.forEach(c => {
+                section.push(c.compile());
+            })
+
+            let maxlength = 0;
+            section.forEach(s => {
+                if (s.Notes.length > maxlength) {
+                    maxlength = s.Notes.length;
+                }
+            })
+
+            section.forEach(s => {
+                if (s.Notes.length < maxlength) {
+                    s.Notes = this.appendSpace(s.Notes, s.Notes.length - maxlength)
+                }
+            })
+
+            SymbolTable.set(this.name, section)
+                            
         } catch (err) {
             throw new CompileError(err.message);
         }
     }
+
+    private appendSpace(sec: Array<any>, diff: number): Array<any> {
+        
+        for (let i = 0; i < diff; i++) {
+            sec.push(0);
+        }
+
+        return sec;
+    } 
 
     public root(): Node {
         return this;
