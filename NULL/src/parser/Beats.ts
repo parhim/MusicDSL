@@ -34,15 +34,20 @@ export default class Beats extends Node {
                 throw new ParserError("Beats must be separated with commas")
             }
         }
+
         if (beats.length != MeasureLength)
         {
             throw new ParserError("Beats must be of length 8")
         }
+
+        let beatsArray = [beats];
         SymbolTable.set(this.name,
-            {
-                "Instrument" : this.rhythmInstrument,
-                "Notes" : beats
-            });
+            [
+                {
+                    "Instrument" : this.rhythmInstrument,
+                    "Notes" : beatsArray
+                }
+            ]);
     }
 
     public compile() {

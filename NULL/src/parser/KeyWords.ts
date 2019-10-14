@@ -35,15 +35,20 @@ export default class KeyWords{
             ONE: 1
         },
         MELODIC: {
-            A: "A",
-            B: "B",
-            C: "C",
-            D: "D", 
-            E: "E",
-            F: "F",
+            C: 60,
+            D: 62,
+            E: 64,
+            F: 65,
+            FSHARP: 66,
+            G: 67,
+            A: 69,
+            B: 71,
             CMAJ: "Cmaj",
-            CMAJ7: "Cmaj7"
-            // TODO add more..
+            GMAJ: "Gmaj",
+            FMAJ: "Fmaj",
+            DMAJ: "Dmaj",
+            AMIN: "Amin",
+            EMIN: "Emin"
         }
     
     }

@@ -10,33 +10,74 @@ export default class Notes extends Node {
     melodicInstrument: String;
     name: String;
 
+    first = [];
+    third = [];
+    fifth = [];
+
+    melNotes = KeyWords.Notes.MELODIC;
+
     constructor(name: String, melodicInstrument: String) {
         super();
         this.melodicInstrument = melodicInstrument;
         this.name = name;
     }
-
     public parse(context: Tokenizer) {
-        let notes = [];
+
         let lineNum = context.getLine();
 
         while (context.hasNext() && (lineNum == context.getLine())) {
-            // TODO: figure out how to separate chords into notes and into diff tracks??
+            let nextNote = context.pop();
+
+            if (+nextNote == KeyWords.Notes.RHYTHMIC.ZERO) {
+                this.addChord(0,0,0);
+            }
+
+            switch (nextNote) {
+                case this.melNotes.CMAJ:
+                    this.addChord(this.melNotes.C, this.melNotes.E, this.melNotes.G);
+                    break;
+                case this.melNotes.GMAJ:
+                    this.addChord(this.melNotes.G, this.melNotes.B, this.melNotes.D);
+                    break;
+                case this.melNotes.FMAJ:
+                    this.addChord(this.melNotes.F, this.melNotes.A, this.melNotes.C);
+                    break;
+                case this.melNotes.DMAJ:
+                    this.addChord(this.melNotes.D, this.melNotes.FSHARP, this.melNotes.A);
+                    break;
+                case this.melNotes.AMIN:
+                    this.addChord(this.melNotes.A, this.melNotes.C, this.melNotes.E);
+                    break;
+                case this.melNotes.EMIN:
+                    this.addChord(this.melNotes.E, this.melNotes.G, this.melNotes.B);
+                    break;
+            }
 
             let comma = context.pop();
             if (comma != Punctuation.COMMA) {
                 throw new ParserError("Notes must be separated with commas")
             }
         }
-        if (notes.length != MeasureLength)
+
+        if (first.length != MeasureLength || second.length != MeasureLength || third.length != MeasureLength)
         {
             throw new ParserError("Notes must be of length 8")
         }
+
+        let notes = [first,second,third];
         SymbolTable.set(this.name,
-            {
-                "Instrument" : this.melodicInstrument,
-                "Notes" : notes
-            });
+            [
+                {
+                    "Instrument" : this.melodicInstrument,
+                    "Notes" : notes
+                }
+            ]);
+    }
+
+    private addChord(first: Number, third: Number, fifth: Number) {
+        this.first.push(first);
+        this.third.push(third);
+        this.fifth.push(fifth);
     }
 
     public compile() {

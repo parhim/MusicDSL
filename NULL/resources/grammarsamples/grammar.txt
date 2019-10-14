@@ -40,12 +40,3 @@ BEATS := ([0|1]”,”){8}
 SECTION := “Section” NAME “:”
                (“|” ([SECTION|LOOP|PRIMITIVE]”,”)+ \n)+
 LOOP := “loop(“ [SECTION|PRIMITIVE] ”,” number “)”
-
-
-================================================================
-MY_PART:
-
-MELODIC := [organ|guitar|flute] NAME “=” NOTES
-NOTES := ([cmaj|cmin|cmaj7…..]”,”){8}
-RHYTHMIC := [snare|hat|kick] NAME “=” BEATS
-BEATS := ([0|1]”,”){8}

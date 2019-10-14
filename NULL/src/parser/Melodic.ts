@@ -4,6 +4,7 @@ import {ParserError} from '../errors/ParserError';
 import {CompileError} from "../errors/CompileError";
 import {OutputWriter} from "../dsl/OutputWriter";
 import Notes from "./Notes";
+import {Punctuation} from "./KeyWords";
 
 
 export default class Melodic extends Node {
@@ -17,7 +18,11 @@ export default class Melodic extends Node {
     parse(context: Tokenizer) {
         this.instrument = context.pop();
         this.name = context.pop();
-        context.pop(); // '='
+        context.pop();
+        if (comma != Punctuation.EQUAL) {
+            throw new ParserError("Missing '=' from " + this.instrument + " declaration")
+        }
+
         let notes = new Notes(this.name, this.instrument);
         this.notes = notes;
         notes.parse(context);
