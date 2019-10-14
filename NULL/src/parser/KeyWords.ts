@@ -59,6 +59,8 @@ export default class KeyWords{
         term = term.toUpperCase();
         return Tokens.INSTRUMENTS.MELODIC[term] || Tokens.INSTRUMENTS.RHYTHMIC[term];
     }
+
+    public static Debug = true;
 }
 
 
@@ -66,3 +68,4 @@ export const Tokens = KeyWords.Tokens;
 export const Punctuation = KeyWords.Tokens.PUNCTUATION;
 export const Notes = KeyWords.Notes;
 export const MeasureLength = 8;
+export const Debug = KeyWords.Debug;

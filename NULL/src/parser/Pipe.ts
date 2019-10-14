@@ -4,6 +4,7 @@ import {Tokens} from "./KeyWords";
 import {CompileError} from "../errors/CompileError";
 import Loop from "./Loop";
 import VarUse from "./VarUse";
+import KeyWords from "./KeyWords";
 
 export default class Pipe extends Node {
   sequence: Array<Node|0>;
@@ -39,27 +40,44 @@ export default class Pipe extends Node {
     }
   }
 
+  private length(node: any): number {
+    let len = 0;
+    // Not really necessary, since all tracks should already be the same size
+    node.forEach((node) => {
+      len = Math.max(len, node.Notes.length);
+    });
+    return len;
+  }
 
   public compile() {
       try {
+        if (KeyWords.Debug) console.log(`====Pipe Start====`);
         let seq = [];
+        let out = [];
+
         this.sequence.forEach((node) => {
             if (node === 0) {
               seq.push([{ Instrument: Tokens.INSTRUMENTS.RHYTHMIC.KICK, Notes: [0], }]); // Just an empty track
             } else {
-              seq.push(node.compile());
+              let comp = node.compile();
+              if (typeof(comp) === 'object'){
+                seq.push(comp);
+              } else {
+                // console.log(typeof(comp), comp); // Handling unfinished loop
+              }
             }
         });
 
         let prepend = 0;
         let maxlength = 0;
         seq.forEach((node) => {
-          maxlength += node.length;
+          maxlength += this.length(node);
         });
 
         seq.forEach((node) => {
-          let len = node.length;
+          let len = this.length(node);
           let append = maxlength - (len + prepend);
+          if (KeyWords.Debug) console.log('Pipe',maxlength, len);
 
           // Prepend
           let preparray = [];
@@ -73,15 +91,16 @@ export default class Pipe extends Node {
             apparray.push(0);
           }
 
-          node.Notes = preparray.concat(node.Notes, apparray);
+          node.forEach((track) => {
+            let newTrack = JSON.parse(JSON.stringify(track));
+            newTrack.Notes = preparray.concat(newTrack.Notes, apparray);
+            out.push(newTrack);
+          })
 
           prepend += len;
         });
-
-        // Remove null tracks
-        
-
-        return seq;
+        if (KeyWords.Debug) console.log(`====Pipe End====`);
+        return out;
       } catch (err) {
           throw new CompileError(err.message);
       }

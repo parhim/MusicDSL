@@ -19,7 +19,7 @@ export default class VarUse extends Node {
 
   public compile() {
       try {
-        return SymbolTable.get(name);
+        return SymbolTable.get(this.name);
       } catch (err) {
           throw new CompileError(err.message);
       }

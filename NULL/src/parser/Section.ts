@@ -1,7 +1,7 @@
 import {Node} from "./Node";
 import Tokenizer from "../parser/Tokenizer";
 import {ParserError} from '../errors/ParserError';
-import {Tokens, Punctuation} from "./KeyWords";
+import KeyWords, {Tokens, Punctuation} from "./KeyWords";
 import {CompileError} from "../errors/CompileError";
 import {OutputWriter} from "../dsl/OutputWriter";
 import Pipe from "./Pipe";
@@ -13,6 +13,7 @@ export default class Section extends Node {
 
     constructor() {
         super();
+        this.name = "";
     }
 
     public parse(context: Tokenizer) {
@@ -41,30 +42,48 @@ export default class Section extends Node {
         this.children = nodes;
     }
 
+    private length(pipe: any): number {
+        let len = 0;
+        // Not really necessary, since all tracks should already be the same size
+        pipe.forEach((track) => {
+          len = Math.max(len, track.Notes.length);
+        });
+        return len;
+      }
 
     public compile() {
         try {
+            if (KeyWords.Debug) console.log(`====SECTION ${this.name} Start====`);
 
             let section: Array<any> = [];
+            let out: Array<any> = [];
 
             this.children.forEach(c => {
                 section.push(c.compile());
             })
 
             let maxlength = 0;
-            section.forEach(s => {
-                if (s.Notes.length > maxlength) {
-                    maxlength = s.Notes.length;
+            section.forEach((pipe) => {
+                let slen = this.length(pipe);
+                if (slen > maxlength) {
+                    maxlength = slen;
                 }
             })
 
-            section.forEach(s => {
-                if (s.Notes.length < maxlength) {
-                    s.Notes = this.appendSpace(s.Notes, s.Notes.length - maxlength)
-                }
+            section.forEach((pipe) => {
+                pipe.forEach((track) => {
+                    if (track.Notes.length < maxlength) {
+                        if (KeyWords.Debug) console.log('Sect', track.Notes.length, maxlength);
+                        let newTrack = JSON.parse(JSON.stringify(track));
+                        newTrack.Notes = this.appendSpace(newTrack.Notes, maxlength - newTrack.Notes.length)
+                        out.push(newTrack);
+                    }
+                });
             })
 
-            SymbolTable.set(this.name, section)
+            SymbolTable.set(this.name, out)
+
+            if (KeyWords.Debug) console.log(`====SECTION ${this.name} END====`);
                             
         } catch (err) {
             throw new CompileError(err.message);
@@ -72,7 +91,6 @@ export default class Section extends Node {
     }
 
     private appendSpace(sec: Array<any>, diff: number): Array<any> {
-        
         for (let i = 0; i < diff; i++) {
             sec.push(0);
         }
