@@ -72,12 +72,12 @@ export default class Section extends Node {
 
             section.forEach((pipe) => {
                 pipe.forEach((track) => {
+                    if (KeyWords.Debug) console.log('Sect', track.Notes.length, maxlength);
+                    let newTrack = JSON.parse(JSON.stringify(track));
                     if (track.Notes.length < maxlength) {
-                        if (KeyWords.Debug) console.log('Sect', track.Notes.length, maxlength);
-                        let newTrack = JSON.parse(JSON.stringify(track));
                         newTrack.Notes = this.appendSpace(newTrack.Notes, maxlength - newTrack.Notes.length)
-                        out.push(newTrack);
                     }
+                    out.push(newTrack);
                 });
             })
 
