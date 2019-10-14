@@ -45,6 +45,7 @@ export class MusicProgram implements IProgram {
                 // node = new Return()
             }
             else {
+                console.log(context);
                 throw new ParserError(`Unrecognizable token: ${nextToken}`);
             }
             this.nodes.push(node);

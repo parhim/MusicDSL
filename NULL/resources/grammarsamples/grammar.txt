@@ -6,7 +6,7 @@ createsong(“jingle bells”):
     Organ m  = Cmaj, Cmaj, 0, Cmaj7, 0, 0, 0, Cmaj
 
     Section s:
-        | b1, b2, loop(b1 4)
+        | b1, b2, loop(b1, 4)
 
     Section verse:
         | b1, b1, b1, s

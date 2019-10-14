@@ -3,6 +3,7 @@ export default class KeyWords{
 
     public static Tokens = {
         IDENTIFIER: /[_A-Za-z]+([A-Za-z0-9]*)/g,
+        NUMBER: /[0-9]+/g,
         CREATESONG: "createsong",
         SECTION: "Section",
         PIPE: "|",
