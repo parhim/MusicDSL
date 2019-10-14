@@ -16,8 +16,8 @@ export default class Pipe extends Node {
   public parse(context: Tokenizer) {
     // Assuming pipe symbol is popped
     let cont = true;
-    while (cont) {
-      if (context.checkNext(Tokens.LOOP)) {
+    while (context.hasNext() && cont) {
+      if (context.top() === Tokens.LOOP) {
         let loop = new Loop();
         loop.parse(context);
         this.sequence.push(loop);
@@ -30,6 +30,8 @@ export default class Pipe extends Node {
       // Determine end of a pipe by the lack of a comma
       if (context.top() !== Tokens.PUNCTUATION.COMMA) {
         cont = false;
+      } else {
+        context.pop();
       }
     }
   }
