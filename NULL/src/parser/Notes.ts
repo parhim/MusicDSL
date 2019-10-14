@@ -12,6 +12,7 @@ export default class Notes extends Node {
     first = [];
     third = [];
     fifth = [];
+    seventh = [];
 
     melNotes = KeyWords.Notes.MELODIC;
 
@@ -23,52 +24,60 @@ export default class Notes extends Node {
 
     public parse(context: Tokenizer) {
 
-        let lineNum = context.getLine();
-
-        while (context.hasNext() && (lineNum == context.getLine())) {
+        let cont = true;
+        while (context.hasNext() && cont) {
             let nextNote = context.pop();
 
-            if (+nextNote == KeyWords.Notes.RHYTHMIC.ZERO) {
-                this.addChord(0,0,0);
+            if (+nextNote === KeyWords.Notes.RHYTHMIC.ZERO) {
+                this.addChord(0,0,0,0);
+            } else {
+                switch (nextNote) {
+                    case this.melNotes.CMAJ:
+                        this.addChord(this.melNotes.C, this.melNotes.E, this.melNotes.G, 0);
+                        break;
+                    case this.melNotes.CMAJ7:
+                        this.addChord(this.melNotes.C, this.melNotes.E, this.melNotes.G, this.melNotes.B);
+                        break;
+                    case this.melNotes.GMAJ:
+                        this.addChord(this.melNotes.G, this.melNotes.B, this.melNotes.D, 0);
+                        break;
+                    case this.melNotes.FMAJ:
+                        this.addChord(this.melNotes.F, this.melNotes.A, this.melNotes.C, 0);
+                        break;
+                    case this.melNotes.DMAJ:
+                        this.addChord(this.melNotes.D, this.melNotes.FSHARP, this.melNotes.A, 0);
+                        break;
+                    case this.melNotes.AMIN:
+                        this.addChord(this.melNotes.A, this.melNotes.C, this.melNotes.E, 0);
+                        break;
+                    case this.melNotes.EMIN:
+                        this.addChord(this.melNotes.E, this.melNotes.G, this.melNotes.B, 0);
+                        break;
+                    default:
+                        throw new ParserError(`Invalid note: ${nextNote}`)
+                }
             }
 
-            switch (nextNote) {
-                case this.melNotes.CMAJ:
-                    this.addChord(this.melNotes.C, this.melNotes.E, this.melNotes.G);
-                    break;
-                case this.melNotes.GMAJ:
-                    this.addChord(this.melNotes.G, this.melNotes.B, this.melNotes.D);
-                    break;
-                case this.melNotes.FMAJ:
-                    this.addChord(this.melNotes.F, this.melNotes.A, this.melNotes.C);
-                    break;
-                case this.melNotes.DMAJ:
-                    this.addChord(this.melNotes.D, this.melNotes.FSHARP, this.melNotes.A);
-                    break;
-                case this.melNotes.AMIN:
-                    this.addChord(this.melNotes.A, this.melNotes.C, this.melNotes.E);
-                    break;
-                case this.melNotes.EMIN:
-                    this.addChord(this.melNotes.E, this.melNotes.G, this.melNotes.B);
-                    break;
-            }
-
-            let comma = context.pop();
+            let comma = context.top();
             if (comma != Punctuation.COMMA) {
-                throw new ParserError("Notes must be separated with commas")
+                cont = false;
+            } else {
+                context.pop();
             }
         }
 
-        if (this.first.length != MeasureLength || this.third.length != MeasureLength || this.fifth.length != MeasureLength)
+        if (this.first.length != MeasureLength || this.third.length != MeasureLength 
+            || this.fifth.length != MeasureLength || this.seventh.length != MeasureLength)
         {
-            throw new ParserError("Notes must be of length 8")
+            throw new ParserError("Notes must be of length 8");
         }
     }
 
-    private addChord(first: Number, third: Number, fifth: Number) {
+    private addChord(first: Number, third: Number, fifth: Number, seventh: Number) {
         this.first.push(first);
         this.third.push(third);
         this.fifth.push(fifth);
+        this.seventh.push(seventh);
     }
 
     public compile() {
@@ -86,6 +95,10 @@ export default class Notes extends Node {
                     {
                         "Instrument" : this.melodicInstrument,
                         "Notes" : this.fifth
+                    },
+                    {
+                        "Instrument" : this.melodicInstrument,
+                        "Notes" : this.seventh
                     }
                 ]);
         } catch (err) {

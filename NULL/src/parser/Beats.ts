@@ -14,12 +14,12 @@ export default class Beats extends Node {
         super();
         this.rhythmInstrument = rhythmInstrument;
         this.name = name;
+        this.beats = [];
     }
 
     public parse(context: Tokenizer) {
-        let lineNum = context.getLine();
-
-        while (context.hasNext() && (lineNum == context.getLine())) {
+        let cont = true;
+        while (context.hasNext() && cont) {
             let beat = Number(context.pop());
 
             if (beat == Notes.RHYTHMIC.ZERO) {
@@ -28,9 +28,11 @@ export default class Beats extends Node {
                 this.beats.push(Notes.RHYTHMIC.ONE)
             }
 
-            let comma = context.pop();
+            let comma = context.top();
             if (comma != Punctuation.COMMA) {
-                throw new ParserError("Beats must be separated with commas")
+                cont = false;
+            } else {
+                context.pop();
             }
         }
 

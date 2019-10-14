@@ -18,6 +18,8 @@ export class MusicProgram implements IProgram {
 
     constructor(source: string) {
         this.source = source;
+        this.nodes = [];
+        this.name = "";
     }
 
     public parse(): void {

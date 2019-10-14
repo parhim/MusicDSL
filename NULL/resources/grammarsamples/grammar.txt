@@ -3,7 +3,7 @@ createsong(“jingle bells”):
     Kick b1  = 0,0,0,1,0,0,0,1
     Snare b2 = 1,1,0,0,0,0,0,0
 
-    Organ m  = CMaj, CMaj, 0, CMaj7, 0, 0, 0, CMaj
+    Organ m  = Cmaj, Cmaj, 0, Cmaj7, 0, 0, 0, Cmaj
 
     Section s:
         | b1, b2, loop(b1 4)

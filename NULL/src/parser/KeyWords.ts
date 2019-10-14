@@ -6,7 +6,7 @@ export default class KeyWords{
         CREATESONG: "createsong",
         SECTION: "Section",
         PIPE: "|",
-        LOOP: "Loop",
+        LOOP: "loop",
         RETURN: "return",
         INSTRUMENTS: {
             MELODIC: {
@@ -44,6 +44,7 @@ export default class KeyWords{
             A: 69,
             B: 71,
             CMAJ: "Cmaj",
+            CMAJ7: "Cmaj7",
             GMAJ: "Gmaj",
             FMAJ: "Fmaj",
             DMAJ: "Dmaj",
@@ -55,8 +56,6 @@ export default class KeyWords{
 
     public static isInstrument(term: string): boolean {
         term = term.toUpperCase();
-        console.log(term);
-        console.log(Notes.RHYTHMIC[term]);
         return Tokens.INSTRUMENTS.MELODIC[term] || Tokens.INSTRUMENTS.RHYTHMIC[term];
     }
 }
