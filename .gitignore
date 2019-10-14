@@ -74,3 +74,5 @@ npm-debug.log
 mochawesome-reports/
 **/mochawesome-report/
 .idea/
+
+NULL/out.json

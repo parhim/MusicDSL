@@ -3,6 +3,7 @@ import Tokenizer from "../parser/Tokenizer";
 import {Tokens} from "./KeyWords";
 import {CompileError} from "../errors/CompileError";
 import SymbolTable from "./SymbolTable";
+import { OutputWriter } from "../dsl/OutputWriter";
 
 export default class VarUse extends Node {
   name: String; // TODO
@@ -19,6 +20,12 @@ export default class VarUse extends Node {
 
   public compile() {
       try {
+        // TODO remove, temp for testing
+        if (this.name === 'final') {
+          let writer = OutputWriter.getInstance("out.json", 'utf-8');
+          writer.write(JSON.stringify(SymbolTable.get(this.name)));
+          writer.flush();
+        }
         return SymbolTable.get(this.name);
       } catch (err) {
           throw new CompileError(err.message);

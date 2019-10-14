@@ -63,7 +63,7 @@ export default class Pipe extends Node {
               if (typeof(comp) === 'object'){
                 seq.push(comp);
               } else {
-                // console.log(typeof(comp), comp); // Handling unfinished loop
+                if (KeyWords.Debug) console.log(typeof(comp), comp); // Handling unfinished loop
               }
             }
         });
