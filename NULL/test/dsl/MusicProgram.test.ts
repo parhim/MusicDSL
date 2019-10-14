@@ -33,9 +33,9 @@ describe('DSL should be able to compile', () => {
     });
 
     it('should compile a valid input', async () => {
-
-        // let dotProgram = new MusicProgram("valid/sample.tdot");
-        // let output = compile(dotProgram);
+        let dotProgram = new MusicProgram("grammarsamples/grammar.txt");
+        dotProgram.parse();
+        dotProgram.compile();
         // let outputString = load("valid/output/sample.dot");
         // expect(output.status).to.be.equal(ProgramOutputStatus.SUCCESS);
         // expect(fs.readFileSync(dotProgram.targetPath()).toString('utf-8')).to.be.equal(outputString);
