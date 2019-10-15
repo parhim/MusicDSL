@@ -1,0 +1,21 @@
+createsong(“Cody is the best brother”):
+    Snare snare = 1,1,1,1,1,0,0,1
+    Kick kick = 1,0,1,0,1,0,1,0
+    Hihat HiHat = 1,0,0,0,1,1,1,0
+
+    Guitar guitar = Gmaj, Cmaj, Dmaj, Cmaj, 0, Amin, Emin, Amin
+    Organ organ = Gmaj, Cmaj, Dmaj, Cmaj, 0, Amin, Emin, Amin
+
+    Section loop1:
+        | kick, HiHat, HiHat, kick
+    Section loop2:
+        | snare, snare, snare, snare
+    Section organSection:
+        | loop(organ, 4)
+    Section guitarSection:
+        | loop(guitar, 4)
+    Section verse:
+        | loop1, loop2
+        | organSection, guitarSection
+
+    return verse

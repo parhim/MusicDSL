@@ -17,7 +17,7 @@ export default class KeyWords{
             RHYTHMIC: {
                 KICK: "Kick",
                 SNARE: "Snare",
-                HAT: "Hihat"
+                HIHAT: "Hihat"
             }
         },
         PUNCTUATION: {
