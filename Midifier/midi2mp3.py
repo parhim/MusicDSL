@@ -3,12 +3,18 @@ from midi2audio import FluidSynth
 from pydub import AudioSegment
 
 def start(title):
-    print("this would combine everything and spit out one file named '" + title + ".mp3'")
-    fs = FluidSynth('sound1.sf2')
+    
+    fs = FluidSynth('soundfonts/Scratch_2_0.sf2')
     fs.midi_to_audio('MIDIout/kick.mid', 'kick.wav')
+
+    fs = FluidSynth('soundfonts/FluidR3_GS.sf2')
     fs.midi_to_audio('MIDIout/guitar.mid', 'guitar.wav')
+
     fs.midi_to_audio('MIDIout/hihat.mid', 'hihat.wav')
+
+    fs = FluidSynth('soundfonts/FluidR3_GS.sf2')
     fs.midi_to_audio('MIDIout/organ.mid', 'organ.wav')
+
     fs.midi_to_audio('MIDIout/snare.mid', 'snare.wav')
 
     sound1 = AudioSegment.from_file("kick.wav")
