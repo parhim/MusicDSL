@@ -2,28 +2,43 @@
 import re
 import midi2mp3
 import midifier
-# Opens input textfi;e
-input = open("input.txt")
+import json
+import merge as m
+# Opens input textfile
+input = open("song.json")
 #first line has 2 arguments of interest title and tempo
-l = input.readline()
-args = re.split(',',l[l.find('(')+1:l.find(')')])
-title = args[0]
-tempo = int(args[1])
+json_data = json.load(input)
+title = json_data["Title"]
+tracks = json_data["Song"]
+length = 0
+kick = []
+organ = []
+snare = []
+guitar = []
+hihat = []
+for t in tracks:
+    length=len(t["Notes"])
+    if (t["Instrument"] == "Kick"):
+        kick.append(t["Notes"])
+    elif (t["Instrument"] == "Snare"):
+        snare.append(t["Notes"])
+    elif (t["Instrument"] == "Organ"):
+        organ.append(t["Notes"])
+    elif (t["Instrument"] == "HiHat"):
+        hihat.append(t["Notes"])
+    elif (t["Instrument"] == "Guitar"):
+        guitar.append(t["Notes"])
 
-print("title is " + title)
-print("tempo is " + str(tempo) + "\n---------")
 
-# start going over all the lines until you reach 'end'
-while True:
-    line = input.readline()
-    if line.startswith('end'):
-        midi2mp3.start(title)
-    else:
-        if not line: 
-            break
-        midifier.create(line,tempo)
-        
 
+midifier.create(kick, 'kick') 
+midifier.create(snare, 'snare') 
+midifier.create(organ, 'organ') 
+midifier.create(hihat, 'hihat')
+midifier.create(guitar, 'guitar')
+
+midi2mp3.start(title)   
+##
 # gotta have a function that counts the maximum 
 # amount of measures across all tracks at the end 
 # of parsing, and appends silence MIDI for 
