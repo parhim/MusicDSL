@@ -13,9 +13,9 @@ def create(t,instrument):
     track = MIDIFile(1)
     track.addTempo(track,0,tempo)
 
-    for i in range(len(t)):
+    for i in range(len(t)): # for each set of notes
         time = 0
-        for n in range(len(t[i])):
+        for n in range(len(t[i])): # for each count
             if (t[i][n] == 1):
                 track.addNote(0, channel, 50, time, duration, volume)
             elif (t[i][n] != 0):

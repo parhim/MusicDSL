@@ -78,3 +78,7 @@ mochawesome-reports/
 .idea/
 
 NULL/out.json
+
+**.sf2
+fluid-soundfont-3.1/*
+**.wav

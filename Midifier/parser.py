@@ -3,9 +3,9 @@ import re
 import midi2mp3
 import midifier
 import json
-import merge as m
+# import merge as m
 # Opens input textfile
-input = open("song.json")
+input = open("song1.json")
 #first line has 2 arguments of interest title and tempo
 json_data = json.load(input)
 title = json_data["Title"]
