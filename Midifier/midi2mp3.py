@@ -7,14 +7,16 @@ def start(title):
     fs = FluidSynth('soundfonts/Scratch_2_0.sf2')
     fs.midi_to_audio('MIDIout/kick.mid', 'kick.wav')
 
-    fs = FluidSynth('soundfonts/FluidR3_GS.sf2')
+    fs = FluidSynth('soundfonts/FluidR3_GM.sf2')
     fs.midi_to_audio('MIDIout/guitar.mid', 'guitar.wav')
 
+    fs = FluidSynth('soundfonts/FluidR3_GM.sf2')
     fs.midi_to_audio('MIDIout/hihat.mid', 'hihat.wav')
 
-    fs = FluidSynth('soundfonts/FluidR3_GS.sf2')
+    fs = FluidSynth('soundfonts/FluidR3_GM.sf2')
     fs.midi_to_audio('MIDIout/organ.mid', 'organ.wav')
 
+    fs = FluidSynth('soundfonts/Scratch_2_0.sf2')
     fs.midi_to_audio('MIDIout/snare.mid', 'snare.wav')
 
     sound1 = AudioSegment.from_file("kick.wav")
