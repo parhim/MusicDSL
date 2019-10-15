@@ -54,7 +54,7 @@ export class MusicProgram implements IProgram {
                 node = new Return();
             }
             else {
-                throw new ParserError(`Unrecognizable token: ${nextToken}`);
+                throw new ParserError(`Line ${context.getLine()} Unrecognizable token: ${nextToken}`);
             }
             this.nodes.push(node);
             node.parse(context);

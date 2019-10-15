@@ -38,7 +38,7 @@ export default class Beats extends Node {
 
         if (this.beats.length != MeasureLength)
         {
-            throw new ParserError("Beats must be of length 8")
+            throw new ParserError(`Line ${context.getLine()} Beats must be of length 8`);
         }
     }
 

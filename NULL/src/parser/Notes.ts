@@ -54,7 +54,7 @@ export default class Notes extends Node {
                         this.addChord(this.melNotes.E, this.melNotes.G, this.melNotes.B, 0);
                         break;
                     default:
-                        throw new ParserError(`Invalid note: ${nextNote}`)
+                        throw new ParserError(`Line ${context.getLine()} Invalid note: ${nextNote}`);
                 }
             }
 
@@ -69,7 +69,7 @@ export default class Notes extends Node {
         if (this.first.length != MeasureLength || this.third.length != MeasureLength 
             || this.fifth.length != MeasureLength || this.seventh.length != MeasureLength)
         {
-            throw new ParserError("Notes must be of length 8");
+            throw new ParserError(`Line ${context.getLine()} Notes must be of length 8`);
         }
     }
 

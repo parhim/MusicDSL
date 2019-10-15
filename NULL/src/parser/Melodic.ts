@@ -19,7 +19,7 @@ export default class Melodic extends Node {
         this.name = context.pop();
         let comma = context.pop();
         if (comma != Punctuation.EQUAL) {
-            throw new ParserError("Missing '=' from " + this.instrument + " declaration")
+            throw new ParserError(`Line ${context.getLine()} Missing '=' from ${this.instrument} declaration`);
         }
 
         let notes = new Notes(this.name, this.instrument);
