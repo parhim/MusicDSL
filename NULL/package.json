@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "child_process": "^1.0.2",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.2",
     "save": "^2.4.0",
     "save-dev": "0.0.1-security",
     "typings": "^2.1.1"
